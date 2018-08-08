@@ -1,8 +1,7 @@
 # cd /home/ekaterina/PycharmProjects/calendar/app
-# python3 main.py
-# python3 main.py add_person -n Kate -s Okman -d 08-12-1996
+# python3 -m app.main
+# python3 -m app.main -n Kate -s Okman -d 08-12-1989
 
-# import app.commands as commands
 from . import commands
 
 commands.cli.add_command(commands.add)
