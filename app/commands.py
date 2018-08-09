@@ -1,8 +1,8 @@
-from . import modules
+from . import models
 import click
 
-file = modules.FileStorage.home_dir()
-person_list = modules.PersonList(file)
+file = models.FileStorage.home_dir()
+person_list = models.PersonList(file)
 
 @click.group()
 def cli():
@@ -15,7 +15,7 @@ def cli():
 def add(name, surname, dob):
     name = name.capitalize()
     surname = surname.capitalize()
-    person = modules.Person(name, surname, dob)
+    person = models.Person(name, surname, dob)
     if person in person_list:
         raise Exception("Person already exist")
     else:
@@ -40,7 +40,7 @@ def delete(id):
 
 @click.command()
 def list_full():
-    table = modules.Table()
+    table = models.Table()
     for i in person_list.data:
         table.add_row(i)
     table.get_table()
@@ -49,7 +49,7 @@ def list_full():
 @click.option('--name', '-n', help='Enter the name of person you want to find')
 def search(name):
     name = name.capitalize()
-    table = modules.Table()
+    table = models.Table()
     count_name = 0
     for i in person_list.data:
         if name in i['name']:
@@ -63,7 +63,7 @@ def search(name):
 @click.command()
 @click.option('--month', '-m', help='Enter the name of person you want to find')
 def search_month(month):
-    table = modules.Table()
+    table = models.Table()
     count = 0
     for i in person_list.data:
         if month == i['dob'][3:5]:
