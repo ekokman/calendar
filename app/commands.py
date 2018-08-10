@@ -45,26 +45,15 @@ def delete(id_of_person):
 @click.command()
 def list_full():
     person_list = init_person_list()
-    table = models.Table()
-    for i in person_list.data:
-        table.add_row(i)
-    table.get_table()
+    person_list.show(output_format='table')
 
 @click.command()
 @click.option('--name', '-n', help='Enter the name of person you want to find')
 def search(name):
     person_list = init_person_list()
     name = name.capitalize()
-    table = models.Table()
-    count_name = 0
-    for i in person_list.data:
-        if name in i['name']:
-            count_name += 1
-            table.add_row(i)
-    if count_name >= 1:
-        table.get_table()
-    else:
-        raise Exception("Person with this name is not on the list.")
+    person_list.search_by_name(name)
+    person_list.show(output_format='table')
 
 @click.command()
 @click.option('--month', '-m', help='Enter your birth month to search')

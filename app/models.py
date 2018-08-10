@@ -56,6 +56,24 @@ class PersonList(object):
             self.data_of_person.append(person_from_dict)
         return self.data_of_person                        #возвращаем список объектов Person
 
+    def show(self, output_format):
+        if output_format == 'table':
+            table = Table()
+            for i in self.data:
+                table.add_row(i)
+            table.get_table()
+
+    def search_by_name(self, name):
+        list_of_names = []
+        for i in self.data:
+            if name in i['name']:
+                list_of_names.append(i)
+        self.data = list_of_names
+
+        if len(list_of_names) >= 1:
+            return self.data
+        else:
+            raise Exception("Person with this name is not on the list.")
 
 class FileStorage(object):
     def __init__(self, path):
