@@ -29,18 +29,9 @@ def add(name, surname, dob):
 @click.option('--id_of_person', '-i', help='Enter the id of the person you want to delete')
 def delete(id_of_person):
     person_list = init_person_list()
-    count_id = 0
-    for i in person_list.data:
-        if id_of_person in i['id'] and id_of_person[0:3] == i['id'][0:3]:
-            count_id += 1
-            del_i = i
-            if count_id >= 2:
-                raise Exception("Id is repeated")
-    if count_id == 0:
-        raise Exception("There is no person with this id in the list")
-    else:
-        person_list.data.remove(del_i)
-        person_list.save()
+    person_list.delete_person(id_of_person)
+    person_list.save()
+
 
 @click.command()
 def list_full():
@@ -59,13 +50,5 @@ def search(name):
 @click.option('--month', '-m', help='Enter your birth month to search')
 def search_month(month):
     person_list = init_person_list()
-    table = models.Table()
-    count = 0
-    for i in person_list.data:
-        if month == i['dob'][3:5]:
-            count += 1
-            table.add_row(i)
-    if count >= 1:
-        table.get_table()
-    else:
-        raise Exception("Person happy birthday this month is not on the list")
+    person_list.search_by_month(month)
+    person_list.show(output_format='table')

@@ -1,6 +1,7 @@
 import json
 import uuid
 import os
+import datetime
 from pathlib import Path
 from collections import namedtuple
 from prettytable import PrettyTable
@@ -37,7 +38,7 @@ class PersonList(object):
     def __next__(self):
         if self.counter <= (len(self) - 2):
             self.counter += 1
-            return self.data_of_person[self.counter]  #возвращается объект
+            return self.data_of_person[self.counter]
         else:
             raise StopIteration
 
@@ -54,7 +55,7 @@ class PersonList(object):
             d_named = namedtuple("Person", i.keys())(*i.values())
             person_from_dict = Person(d_named.name, d_named.surname, d_named.dob)
             self.data_of_person.append(person_from_dict)
-        return self.data_of_person                        #возвращаем список объектов Person
+        return self.data_of_person
 
     def show(self, output_format):
         if output_format == 'table':
@@ -74,6 +75,33 @@ class PersonList(object):
             return self.data
         else:
             raise Exception("Person with this name is not on the list.")
+
+    def delete_person(self, id_of_person):
+        count_id = 0
+        del_i = 0
+        for i in self.data:
+            if id_of_person in i['id'] and id_of_person[0:3] == i['id'][0:3]:
+                count_id += 1
+                del_i = i
+                if count_id >= 2:
+                    raise Exception("Id is repeated")
+        if count_id == 0:
+            raise Exception("There is no person with this id in the list")
+        else:
+            self.data.remove(del_i)
+            return self.data
+    def search_by_month(self, month):
+        list_of_month = []
+        for i in self.data:
+            dob = datetime.datetime.strptime(i['dob'], '%d-%m-%Y')
+            if int(month) == dob.month:
+                list_of_month.append(i)
+        if len(list_of_month) >= 1:
+            self.data = list_of_month
+            return self.data
+        else:
+            raise Exception("Person happy birthday this month is not on the list")
+
 
 class FileStorage(object):
     def __init__(self, path):
