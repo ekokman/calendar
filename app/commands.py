@@ -43,12 +43,13 @@ def list_full():
 def search(name):
     person_list = init_person_list()
     name = name.capitalize()
-    person_list.search_by_name(name)
-    person_list.show(output_format='table')
+    searched = person_list.search_by_name(name)
+    person_list.show_searched_person(searched, output_format='table')
 
 @click.command()
 @click.option('--month', '-m', help='Enter your birth month to search')
 def search_month(month):
     person_list = init_person_list()
-    person_list.search_by_month(month)
-    person_list.show(output_format='table')
+    searched = person_list.search_by_month(month)
+    person_list.show_searched_person(searched, output_format='table')
+

@@ -60,29 +60,28 @@ class PersonList(object):
     def show(self, output_format):
         if output_format == 'table':
             table = Table()
-            for i in self.data:
-                table.add_row(i)
+            for item in self.data:
+                table.add_row(item)
             table.get_table()
 
     def search_by_name(self, name):
         list_of_names = []
-        for i in self.data:
-            if name in i['name']:
-                list_of_names.append(i)
-        self.data = list_of_names
+        for item in self.data:
+            if name in item['name']:
+                list_of_names.append(item)
 
         if len(list_of_names) >= 1:
-            return self.data
+            return list_of_names
         else:
             raise Exception("Person with this name is not on the list.")
 
     def delete_person(self, id_of_person):
         count_id = 0
         del_i = 0
-        for i in self.data:
-            if id_of_person in i['id'] and id_of_person[0:3] == i['id'][0:3]:
+        for item in self.data:
+            if id_of_person in item['id'] and id_of_person[0:3] == item['id'][0:3]:
                 count_id += 1
-                del_i = i
+                del_i = item
                 if count_id >= 2:
                     raise Exception("Id is repeated")
         if count_id == 0:
@@ -90,17 +89,25 @@ class PersonList(object):
         else:
             self.data.remove(del_i)
             return self.data
+
     def search_by_month(self, month):
         list_of_month = []
-        for i in self.data:
-            dob = datetime.datetime.strptime(i['dob'], '%d-%m-%Y')
+        for item in self.data:
+            dob = datetime.datetime.strptime(item['dob'], '%d-%m-%Y')
             if int(month) == dob.month:
-                list_of_month.append(i)
+                list_of_month.append(item)
         if len(list_of_month) >= 1:
-            self.data = list_of_month
-            return self.data
+            return list_of_month
         else:
             raise Exception("Person happy birthday this month is not on the list")
+
+    def show_searched_person(self, searched, output_format):
+        if output_format == 'table':
+            table = Table()
+            for item in searched:
+                table.add_row(item)
+            table.get_table()
+
 
 
 class FileStorage(object):
@@ -111,8 +118,7 @@ class FileStorage(object):
 
     def read(self):
         with open(self.path, 'r') as myfile:
-            data_json = json.loads(myfile.read())
-            return data_json
+            return json.loads(myfile.read())
 
     def write(self, data):
         with open(self.path, 'w') as myfile:
