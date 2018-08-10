@@ -79,7 +79,7 @@ class PersonList(object):
         count_id = 0
         del_i = 0
         for item in self.data:
-            if id_of_person in item['id'] and id_of_person[0:3] == item['id'][0:3]:
+            if item['id'].startswith(id_of_person):
                 count_id += 1
                 del_i = item
                 if count_id >= 2:
